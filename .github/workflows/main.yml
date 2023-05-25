@@ -42,8 +42,8 @@ jobs:
           ./k6 run scripts/test.js
 
      
-      - name: GH Pages Push
-        uses: PavanMudigonda/html-reporter-github-pages/composite@v1.1
+      - name: Deploy 
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          test_results: result
-          keep_reports: 20
+          branches: gh-pages
+          folder: ./result
