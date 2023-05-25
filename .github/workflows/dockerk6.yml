@@ -4,9 +4,15 @@ name: CI
 
 # Controls when the workflow will run
 on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
   # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+
 permissions:
   contents: write
   pages: write
@@ -25,15 +31,16 @@ jobs:
       - name: Checkout the latest code
         uses: actions/checkout@v3
         
-
-      - name: Install k6
-        run: |
-          curl https://github.com/loadimpact/k6/releases/download/v0.26.2/k6-v0.26.2-linux64.tar.gz -L | tar xvz --strip-components 1
-     
-      - name: Start server and run tests
+      - name: Docker cache
+        uses: satackey/action-docker-layer-caching@v0.0.11
         continue-on-error: true
-        run: |
-          ./k6 run scripts/test.js
+
+      - name: Pull grafana/k6 docker images
+        run: sudo docker pull grafana/k6
+
+      - name: run the K6 scripts
+        run: sudo docker run -it  --name k6 --user "$(id -u $USER)" -v $(pwd):/src --workdir "/src" -i grafana/k6 run /src/scripts/test.js  
+
 
       - name: check report files
         continue-on-error: true
@@ -46,3 +53,8 @@ jobs:
         with:
           branch: gh-pages
           folder: result
+
+      -name: Remove the k6 container
+       if: always()
+       run: |
+        sudo docker stop k6 && sudo docker rm k6    
