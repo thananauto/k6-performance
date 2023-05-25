@@ -42,11 +42,8 @@ jobs:
           ./k6 run scripts/test.js
 
      
-      - name: HTML Preview
-        id: html_preview
-        uses: pavi2410/html-preview-action@v2
+      - name: GH Pages Push
+        uses: PavanMudigonda/html-reporter-github-pages/composite@v1.1
         with:
-          html_file: './result/index.html'
-
-      - name: Output url
-        run: echo ${{steps.html_preview.outputs.url}}    
+          test_results: result
+          keep_reports: 20
