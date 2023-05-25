@@ -18,14 +18,19 @@ jobs:
     steps:
       - name: Checkout the latest code
         uses: actions/checkout@v3
+
       - name: Docker cache
         uses: satackey/action-docker-layer-caching@v0.0.11
         continue-on-error: true
+
       - name: Pull grafana/k6 docker images
         run: sudo docker pull grafana/k6
+
       - name: run the K6 scripts
-        run: sudo docker run -it  --name k6 --user "$(id -u $USER)" -v $(pwd):/src
-          --workdir "/src" -i grafana/k6 run /src/scripts/test.js
+        run: |
+         docker run --name k6 --user "$(id -u $USER)" -v $(pwd):/src --workdir "/src" -i grafana/k6 run /src/scripts/test.js
+         docker wait k6
+
       - name: check report files
         continue-on-error: true
         run: |
