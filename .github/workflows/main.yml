@@ -27,8 +27,14 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: checkout the code
-        uses: actions/checkout@v2
+      
+      - name: Get test results history
+        uses: actions/checkout@v3
+        if: always()
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages
 
       - name: Install k6
         run: |
@@ -45,7 +51,7 @@ jobs:
         with:
           test_results: result
           gh_pages: gh-pages
-          results_history: results-history
+          results_history: result
           
       - name: Publish Github Pages
         if: ${{ always() }}
@@ -53,7 +59,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: results-history
+          publish_dir: result
           keep_files: true 
 
       - name: Post the link to the report
