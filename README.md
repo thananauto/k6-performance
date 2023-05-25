@@ -14,3 +14,8 @@ In order to run you have to install `k6` Click [here](https://k6.io/docs/get-sta
 
  ## Application 
  For demo purpose we performed load on [DemoBlaze](http://blazedemo.com') site
+
+ ## Result
+ On successfull execution of scripts, the result can be found in `<root>/result/report.html`
+
+ For every push the script would execute via githubworkflow and the latest result can be found [here](https://thananauto.github.io/k6-performance/result/report.html)
