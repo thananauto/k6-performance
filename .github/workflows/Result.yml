@@ -44,7 +44,7 @@ jobs:
 
       - name: run the K6 scripts
         run: |
-         docker run --name k6 --user "$(id -u $USER)" -v $(pwd):/src --workdir "/src" -i grafana/k6 run /src/scripts/blazedemo.js
+         docker run --name k6 --user "$(id -u $USER)" -v $(pwd):/src --workdir "/src" -i grafana/k6 run /src/scripts/test.js
          docker wait k6
 
       - name: check report files
