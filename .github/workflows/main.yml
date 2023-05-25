@@ -28,13 +28,9 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       
-      - name: Get test results history
+      - name: Checkout the latest code
         uses: actions/checkout@v3
-        if: always()
-        continue-on-error: true
-        with:
-          ref: gh-pages
-          path: gh-pages
+        
 
       - name: Install k6
         run: |
@@ -45,21 +41,12 @@ jobs:
         run: |
           ./k6 run scripts/test.js
 
-      - name: Test marketplace action
-        uses: PavanMudigonda/html-reporter-github-pages@v1.0
-        id: test-report
-        with:
-          test_results: result
-          gh_pages: gh-pages
-          results_history: result
-          
-      - name: Publish Github Pages
-        if: ${{ github.ref == 'refs/heads/main' }}
-        uses: peaceiris/actions-gh-pages@v3.8.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages
-          publish_dir: ./result
-          keep_files: true 
-
      
+      - name: HTML Preview
+        id: html_preview
+        uses: pavi2410/html-preview-action@v2
+        with:
+          html_file: './result/index.html'
+
+      - name: Output url
+        run: echo ${{steps.html_preview.outputs.url}}    
