@@ -55,6 +55,7 @@ jobs:
           cd result && ls -a  
         
       - name: Upload artifact
+        if: always()
         uses: actions/upload-pages-artifact@v1
         with:
           # Upload entire repository
