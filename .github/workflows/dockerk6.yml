@@ -1,0 +1,49 @@
+
+name: K6 -Docker
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch: null
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the latest code
+        uses: actions/checkout@v3
+
+      - name: Docker cache
+        uses: satackey/action-docker-layer-caching@v0.0.11
+        continue-on-error: true
+
+      - name: Pull grafana/k6 docker images
+        run: sudo docker pull grafana/k6
+
+      - name: run the K6 scripts
+        run: |
+         docker run --name k6 --user "$(id -u $USER)" -v $(pwd):/src --workdir "/src" -i grafana/k6 run /src/scripts/blazedemo.js
+         docker wait k6
+
+      - name: check report files
+        continue-on-error: true
+        run: |
+          ls -a
+          cd result && ls -a
+
+      - name: Deploy
+        if: always()
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: result
+      - name: Remove the k6 container
+        if: always()
+        run: |
+          sudo docker stop k6 && sudo docker rm k6    
