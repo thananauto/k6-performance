@@ -1,4 +1,4 @@
-# k6-performance [![CI](https://github.com/thananauto/k6-performance/actions/workflows/main.yml/badge.svg)](https://github.com/thananauto/k6-performance/actions/workflows/main.yml)
+# k6-performance [![Static HTML Report - k6](https://github.com/thananauto/k6-performance/actions/workflows/Result.yml/badge.svg)](https://github.com/thananauto/k6-performance/actions/workflows/Result.yml)
 
 ## Overview
 Code that supports the perfomance and Load testing of the web application and the generation of HTML report
