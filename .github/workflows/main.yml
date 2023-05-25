@@ -41,7 +41,7 @@ jobs:
         run: |
           ./k6 run scripts/test.js
 
-      -name: check report files
+      - name: check report files
        continue-on-error: true
         run: |
           cd result && ls -a
