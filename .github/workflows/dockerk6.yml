@@ -26,6 +26,7 @@ jobs:
          docker wait k6
 
       - name: check report files
+        if: always()
         continue-on-error: true
         run: |
           ls -a
@@ -37,6 +38,7 @@ jobs:
         with:
           branch: gh-pages
           folder: result
+
       - name: Remove the k6 container
         if: always()
         run: |
